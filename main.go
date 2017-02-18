@@ -16,6 +16,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"math/rand"
+	"time"
+	"strconv"
 	"os"
 
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -31,6 +34,11 @@ func main() {
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
+}
+
+func random(min, max int) int {
+    rand.Seed(time.Now().Unix())
+    return rand.Intn(max - min) + min
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
@@ -49,9 +57,21 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.ID+":"+message.Text+" OK!")).Do(); err != nil {
-					log.Print(err)
+				if strings.Contains(message.Text, "吃") && strings.Contains(message.Text, "什麼") {
+					log.Print("SIVA: BINGO")
+										
+					i := random(1, 10)
+					ans := strconv.FormatInt(int64(i), 10)
+					ans = "SWFood"+ans
+					log.Print("SIVA: "+ans)
+					
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(ans)).Do(); err != nil {
+						log.Print(err)
+					}
 				}
+				//if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.ID+":"+message.Text+" OK!")).Do(); err != nil {
+				//	log.Print(err)
+				//}
 			}
 		}
 	}
