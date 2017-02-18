@@ -70,7 +70,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					i := random(1, 10)
 					env := strconv.FormatInt(int64(i), 10)
 					env = "SWFood"+env
-					ans = os.Getenv(env)
+					ans := os.Getenv(env)
 					log.Print("SIVA: "+ans)
 					
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(ans)).Do(); err != nil {
