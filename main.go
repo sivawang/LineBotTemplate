@@ -61,7 +61,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				action := strings.Contains(message.Text, "吃")
 				target := strings.Contains(message.Text, "什麼")
 				if !target {
-					target := strings.Contains(message.Text, "啥")
+					target = strings.Contains(message.Text, "啥")
 				}
 				
 				if action && target {
