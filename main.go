@@ -64,6 +64,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					target = strings.Contains(message.Text, "啥")
 				}
 				
+				_ = target
+				
 				if action && target {
 					log.Print("SIVA: BINGO")
 										
