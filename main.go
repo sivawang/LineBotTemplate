@@ -59,7 +59,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 				action := strings.Contains(message.Text, "吃")
-				var target := strings.Contains(message.Text, "什麼")
+				target := strings.Contains(message.Text, "什麼")
 				if !target {
 					target = strings.Contains(message.Text, "啥")
 				}
