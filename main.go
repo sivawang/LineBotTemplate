@@ -58,12 +58,19 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				if strings.Contains(message.Text, "吃") && strings.Contains(message.Text, "什麼") {
+				action := strings.Contains(message.Text, "吃")
+				target := strings.Contains(message.Text, "什麼")
+				if !target {
+					target := strings.Contains(message.Text, "啥")
+				}
+				
+				if action && target {
 					log.Print("SIVA: BINGO")
 										
 					i := random(1, 10)
-					ans := strconv.FormatInt(int64(i), 10)
-					ans = "SWFood"+ans
+					env := strconv.FormatInt(int64(i), 10)
+					env = "SWFood"+env
+					ans = os.Getenv(env)
 					log.Print("SIVA: "+ans)
 					
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(ans)).Do(); err != nil {
