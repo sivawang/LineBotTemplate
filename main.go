@@ -55,6 +55,55 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, event := range events {
+		switch event.Type {
+		case linebot.EventTypeMessage:
+			switch message := event.Message.(type) {
+			case *linebot.TextMessage:
+				if err := handleText(message, event.ReplyToken, event.Source); err != nil {
+					log.Print(err)
+				}
+			case *linebot.ImageMessage:
+				if err := handleImage(message, event.ReplyToken); err != nil {
+					log.Print(err)
+				}
+			case *linebot.VideoMessage:
+				if err := handleVideo(message, event.ReplyToken); err != nil {
+					log.Print(err)
+				}
+			case *linebot.AudioMessage:
+				if err := handleAudio(message, event.ReplyToken); err != nil {
+					log.Print(err)
+				}
+			case *linebot.LocationMessage:
+				if err := handleLocation(message, event.ReplyToken); err != nil {
+					log.Print(err)
+				}
+			case *linebot.StickerMessage:
+				if err := handleSticker(message, event.ReplyToken); err != nil {
+					log.Print(err)
+				}
+			default:
+				log.Printf("Unknown message: %v", message)
+			}
+		case linebot.EventTypeFollow:
+			log.Print("Followed this bot: %v", event)
+		case linebot.EventTypeUnfollow:
+			log.Printf("Unfollowed this bot: %v", event)
+		case linebot.EventTypeJoin:
+			log.Print("Join: %v", event)
+		case linebot.EventTypeLeave:
+			log.Printf("Left: %v", event)
+		case linebot.EventTypePostback:
+			log.Print("Postback: %v", event)
+		case linebot.EventTypeBeacon:
+			log.Print("Beacon: %v", event)
+		default:
+			log.Printf("Unknown event: %v", event)
+		}
+	}
+	
+	/*
+	for _, event := range events {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
@@ -83,4 +132,51 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+	*/
+}
+
+func handleText(message *linebot.TextMessage, replyToken string, source *linebot.EventSource) error {
+	
+	action := strings.Contains(message.Text, "吃")
+	target := strings.Contains(message.Text, "什麼")
+	if !target {
+		target = strings.Contains(message.Text, "啥")
+	}
+								
+	if action && target {
+		log.Print("SIVA: BINGO")
+										
+		i := random(1, 10)
+		env := strconv.FormatInt(int64(i), 10)
+		env = "SWFood"+env
+		ans := os.Getenv(env)
+		log.Print("SIVA: "+ans)
+					
+		if _, err := bot.ReplyMessage(replyToken, linebot.NewTextMessage(ans)).Do(); err != nil {
+			log.Print(err)
+		}
+	}
+	
+	return nil
+}
+
+func handleImage(message *linebot.ImageMessage, replyToken string) error {
+	return nil
+}
+
+func handleVideo(message *linebot.VideoMessage, replyToken string) error {
+	return nil
+}
+
+func handleAudio(message *linebot.AudioMessage, replyToken string) error {
+	return nil
+}
+
+func handleLocation(message *linebot.LocationMessage, replyToken string) error {
+	log.Print("handleLocation")
+	return nil
+}
+
+func handleSticker(message *linebot.StickerMessage, replyToken string) error {
+	return nil
 }
