@@ -21,8 +21,9 @@ import (
 	"strconv"
 	"strings"
 	"os"
-
+	"golang.org/x/net/context"
 	"github.com/line/line-bot-sdk-go/linebot"
+	"googlemaps.github.io/maps"
 )
 
 var bot *linebot.Client
@@ -174,6 +175,33 @@ func handleAudio(message *linebot.AudioMessage, replyToken string) error {
 
 func handleLocation(message *linebot.LocationMessage, replyToken string) error {
 	log.Print("handleLocation")
+	
+	c, err := maps.NewClient(maps.WithAPIKey(os.Getenv("GMAP_KEY")))
+    if err != nil {
+        log.Fatalf("fatal error: %s", err)
+    }
+    
+    ll := &maps.LatLng{
+    	Lat: 25.032806,
+    	Lng: 121.559142,
+    }
+    
+    r := &maps.NearbySearchRequest{
+        Location: ll,
+        Type: "food",
+        Language: "zh",
+        //Region: "TW",
+        OpenNow: true,
+        RankBy: "distance",
+    }
+    
+    resp, err := c.NearbySearch(context.Background(), r)
+    if err != nil {
+        log.Fatalf("fatal error: %s", err)
+    } else {
+    	log.Print(resp)
+    }
+	
 	return nil
 }
 

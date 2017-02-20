@@ -19,7 +19,19 @@
 			"path": "golang.org/x/net/context/ctxhttp",
 			"revision": "9ef22118a4b25863aa94546daffbc0a18feaafb3",
 			"revisionTime": "2016-11-09T21:27:32Z"
+		},
+		{
+			"checksumSHA1": "nJN0U8e6iEhuCEUJX8IMhGVJf8c=",
+			"path": "googlemaps.github.io/maps",
+			"revision": "9b8135f7621ef0994eb2772bce7df8effdd4f8ef",
+			"revisionTime": "2017-02-16T04:44:07Z"
+		},
+		{
+			"checksumSHA1": "T47E4DD/+UCGq0rAc70yGCEWJ0w=",
+			"path": "googlemaps.github.io/maps/internal",
+			"revision": "9b8135f7621ef0994eb2772bce7df8effdd4f8ef",
+			"revisionTime": "2017-02-16T04:44:07Z"
 		}
 	],
-	"rootPath": "github.com/kkdai/LineBotTemplate"
+	"rootPath": "app"
 }
