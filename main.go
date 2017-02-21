@@ -208,9 +208,22 @@ func handleLocation(message *linebot.LocationMessage, replyToken string) error {
     	log.Print("FormattedAddress = %s", resp.Results[i].FormattedAddress)
     	log.Print("Vicinity = %s", resp.Results[i].Vicinity)
     	log.Print("Rating = %f", resp.Results[i].Rating)
-    	ratingStr := FloatToString(float64(resp.Results[i].Rating))
+    	//ratingStr := FloatToString(float64(resp.Results[i].Rating))
+    	    	
+    	ratingStr := ""
+    	rating64 := float64(resp.Results[i].Rating)
+		for i := 0.0; i < 5.0; i++ {
+			ii := i + 0.5
+			if rating64 >= ii {
+				ratingStr = ratingStr+"★"
+			} else {
+				ratingStr = ratingStr+"☆"
+			}
+		} 
     	
-    	messsage := resp.Results[i].Name+"("+ratingStr+")\n"+resp.Results[i].Vicinity
+    	
+    	
+    	messsage := resp.Results[i].Name+"\n"+ratingStr+"\n"+resp.Results[i].Vicinity
     	if _, err := bot.ReplyMessage(replyToken, linebot.NewTextMessage(messsage)).Do(); err != nil {
 			log.Print(err)
 		}
@@ -225,5 +238,5 @@ func handleSticker(message *linebot.StickerMessage, replyToken string) error {
 
 func FloatToString(input_num float64) string {
     // to convert a float number to a string
-    return strconv.FormatFloat(input_num, 'f', -1, 64)
+    return strconv.FormatFloat(input_num, 'f', 1, 64)
 }
