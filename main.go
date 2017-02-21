@@ -180,10 +180,10 @@ func handleLocation(message *linebot.LocationMessage, replyToken string) error {
     if err != nil {
         log.Fatalf("fatal error: %s", err)
     }
-    
+            
     ll := &maps.LatLng{
-    	Lat: 25.032806,
-    	Lng: 121.559142,
+    	Lat: message.Latitude,
+    	Lng: message.Longitude,
     }
     
     r := &maps.NearbySearchRequest{
@@ -199,7 +199,12 @@ func handleLocation(message *linebot.LocationMessage, replyToken string) error {
     if err != nil {
         log.Fatalf("fatal error: %s", err)
     } else {
-    	log.Print(resp)
+    	len := len(resp.Results)
+    	log.Print("length = %i", len)
+    	
+    	i := random(0, len - 1)
+    	log.Print("target = %i", i)
+    	log.Print(resp.Results[i])
     }
 	
 	return nil
