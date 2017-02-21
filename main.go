@@ -200,11 +200,17 @@ func handleLocation(message *linebot.LocationMessage, replyToken string) error {
         log.Fatalf("fatal error: %s", err)
     } else {
     	len := len(resp.Results)
-    	log.Print("length = %i", len)
+    	log.Print("length = %d", len)
     	
     	i := random(0, len - 1)
-    	log.Print("target = %i", i)
-    	log.Print(resp.Results[i])
+    	log.Print("target = %d", i)
+    	log.Print("Name = %s", resp.Results[i].Name)
+    	log.Print("FormattedAddress = %s", resp.Results[i].FormattedAddress)
+    	
+    	messsage := resp.Results[i].Name+"\n"+resp.Results[i].FormattedAddress
+    	if _, err := bot.ReplyMessage(replyToken, linebot.NewTextMessage(messsage)).Do(); err != nil {
+			log.Print(err)
+		}
     }
 	
 	return nil
